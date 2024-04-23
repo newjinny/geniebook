@@ -25,6 +25,9 @@ header {
   padding: 2rem 0;
   flex-direction: column;
 }
+.ham {
+  display: none;
+}
 header h1 {
   text-align: center;
 }
