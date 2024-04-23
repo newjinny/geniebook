@@ -2,27 +2,20 @@ let currentPage = "1";
 let rowsPerPage = "10";
 let queryType = "ItemNewAll";
 let searchTarget = "book";
-let searchKeyWord = "";
 
 const API_KEY = "ttbsyj94370945002";
 const getBaseUrl = (apiEndpoint) =>
   new URL(`http://www.aladin.co.kr/ttb/api/${apiEndpoint}.aspx`);
 
-const hamBtn = document.querySelector(".ham");
-hamBtn.addEventListener("click", () => {
-  const categoryTab = document.querySelector(".categoryTab");
-  categoryTab.classList.toggle("on");
-});
-// 검색
+//검색
 const searchBtn = document.querySelector(".searchBtn");
 const searchInput = document.querySelector(".searchBar input");
 searchBtn.addEventListener("click", () => {
-  searchKeyWord = searchInput.value;
-
-  getDataJSONP("myCallback", "ItemSearch");
+  const searchWord = searchInput.value;
+  console.log(searchWord);
 });
 
-// tab클릭
+//tab클릭
 const categoryTab = document.querySelector(".categoryTab");
 categoryTab.addEventListener("click", (e) => {
   if (e.target.tagName !== "BUTTON") return;
@@ -40,7 +33,7 @@ categoryTab.addEventListener("click", (e) => {
   }
 
   e.target.classList.add("active");
-  getDataJSONP("myCallback", "itemList");
+  getBookListJSONP("myCallback");
 });
 
 // 페이지당 행 수 옵션
@@ -75,7 +68,8 @@ rowsPerPageOption.forEach((rowsOption) => {
 // 페이지당 행 수 변경 이벤트 핸들러
 selectRowsPerPage.addEventListener("change", (e) => {
   rowsPerPage = e.target.value;
-  getDataJSONP("myCallback", "itemList");
+
+  getBookListJSONP("myCallback");
 });
 
 const renderBookInfo = (books) => {
@@ -116,23 +110,21 @@ const renderBookInfo = (books) => {
 };
 
 //데이터 불러오기
-const getDataJSONP = (callbackName, endpoint) => {
-  const baseUrl = getBaseUrl(endpoint);
+const getBookListJSONP = (callbackName) => {
+  const listBaseUrl = getBaseUrl("ItemList");
 
-  baseUrl.searchParams.append("ttbkey", API_KEY);
-  baseUrl.searchParams.append("QueryType", queryType);
-  baseUrl.searchParams.append("SearchTarget", searchTarget);
-  baseUrl.searchParams.append("MaxResults", rowsPerPage);
-  baseUrl.searchParams.append("start", currentPage);
-  baseUrl.searchParams.append("output", "js");
-  baseUrl.searchParams.append("Version", "20131101");
-  baseUrl.searchParams.append("callback", callbackName);
+  listBaseUrl.searchParams.append("ttbkey", API_KEY);
+  listBaseUrl.searchParams.append("QueryType", queryType);
+  listBaseUrl.searchParams.append("SearchTarget", searchTarget);
+  listBaseUrl.searchParams.append("MaxResults", rowsPerPage);
+  listBaseUrl.searchParams.append("start", currentPage);
+  listBaseUrl.searchParams.append("output", "js");
+  listBaseUrl.searchParams.append("Version", "20131101");
+  listBaseUrl.searchParams.append("callback", callbackName);
 
-  if (endpoint === "ItemSearch")
-    baseUrl.searchParams.append("Query", searchKeyWord);
   const script = document.createElement("script");
   // JSONP 서버의 URL 설정
-  script.src = baseUrl;
+  script.src = listBaseUrl;
   // 콜백 함수 설정
   window[callbackName] = (data) => {
     console.log("fetched data", data);
@@ -144,4 +136,4 @@ const getDataJSONP = (callbackName, endpoint) => {
   document.body.appendChild(script);
 };
 // JSONP 요청 보내기
-getDataJSONP("myCallback", "ItemList");
+getBookListJSONP("myCallback");

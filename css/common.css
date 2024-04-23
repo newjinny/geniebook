@@ -149,3 +149,51 @@ main select {
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
+@media (max-width: 600px) {
+  .ham {
+    display: block;
+    position: absolute;
+    right: 0;
+    cursor: pointer;
+    z-index: 10;
+    color: var(--main-color);
+  }
+  .wrap header {
+    position: relative;
+  }
+  main .categoryTab {
+    right: -100%;
+    transition: 0.3s;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    width: 50%;
+    height: 100vh;
+    top: 0;
+    background-color: aliceblue;
+  }
+  main .categoryTab.on {
+    right: 0;
+  }
+  .categoryTab button {
+    border: none;
+    color: gray;
+  }
+  .categoryTab button.active {
+    border: none;
+    color: var(--main-color);
+    font-weight: bold;
+  }
+  .categoryTab:before,
+  .categoryTab:after {
+    content: "";
+    display: none;
+  }
+
+  #bookInfoList .bookInfoWrap {
+    display: block;
+  }
+  .bookInfoWrap .bookImg {
+    width: 200px;
+  }
+}

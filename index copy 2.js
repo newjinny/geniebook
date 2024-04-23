@@ -8,12 +8,7 @@ const API_KEY = "ttbsyj94370945002";
 const getBaseUrl = (apiEndpoint) =>
   new URL(`http://www.aladin.co.kr/ttb/api/${apiEndpoint}.aspx`);
 
-const hamBtn = document.querySelector(".ham");
-hamBtn.addEventListener("click", () => {
-  const categoryTab = document.querySelector(".categoryTab");
-  categoryTab.classList.toggle("on");
-});
-// 검색
+//검색
 const searchBtn = document.querySelector(".searchBtn");
 const searchInput = document.querySelector(".searchBar input");
 searchBtn.addEventListener("click", () => {
@@ -21,8 +16,7 @@ searchBtn.addEventListener("click", () => {
 
   getDataJSONP("myCallback", "ItemSearch");
 });
-
-// tab클릭
+//tab클릭
 const categoryTab = document.querySelector(".categoryTab");
 categoryTab.addEventListener("click", (e) => {
   if (e.target.tagName !== "BUTTON") return;
