@@ -1,8 +1,11 @@
-let currentPage = "1";
-let rowsPerPage = "10";
+let currentPage = 1;
+let rowsPerPage = 10;
 let queryType = "ItemNewAll";
 let searchTarget = "book";
 let searchKeyWord = "";
+let lastPage = Infinity;
+let totalItems = Infinity;
+let numberOfPaginationButtons = 10;
 
 const API_KEY = "ttbsyj94370945002";
 const getBaseUrl = (apiEndpoint) =>
@@ -11,49 +14,154 @@ const getBaseUrl = (apiEndpoint) =>
 const hamBtn = document.querySelector(".ham");
 const closeBtn = document.querySelector(".closeBtn");
 hamBtn.addEventListener("click", () => {
+  document.body.style.overflow = "hidden";
   categoryTab.classList.toggle("on");
 });
 document.addEventListener(
   "click",
   (event) => {
     const isClickInside = categoryTab.contains(event.target);
-
     if (!isClickInside) {
       categoryTab.classList.remove("on");
+      document.body.style.overflow = "auto";
     }
   },
   true
 );
 closeBtn.addEventListener("click", () => {
   categoryTab.classList.remove("on");
+  document.body.style.overflow = "auto";
 });
+
+const handleNavigatePage = (targetPage) => {
+  currentPage = targetPage;
+  getDataJSONP("myCallback", "itemList");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+const prevPageBtn = document.querySelector(".fa-angle-left");
+prevPageBtn.addEventListener("click", () => {
+  if (currentPage === 1) return;
+  handleNavigatePage(currentPage - 1);
+});
+
+const nextPageBtn = document.querySelector(".fa-angle-right");
+nextPageBtn.addEventListener("click", () => {
+  if (currentPage === lastPage) return;
+  handleNavigatePage(currentPage + 1);
+});
+
+const prevPaginationBtn = document.querySelector(".fa-angles-left");
+const calculatePrevStartingPage = (page) => {
+  if (page <= numberOfPaginationButtons) {
+    return 1;
+  } else if (page % numberOfPaginationButtons === 0) {
+    return page - (2 * numberOfPaginationButtons - 1);
+  } else {
+    return (
+      Math.floor(page / numberOfPaginationButtons) * numberOfPaginationButtons -
+      numberOfPaginationButtons +
+      1
+    );
+  }
+};
+prevPaginationBtn.addEventListener("click", () => {
+  if (currentPage === 1) return;
+  const targetPage = calculatePrevStartingPage(currentPage);
+  handleNavigatePage(targetPage);
+});
+
+const nextPaginationBtn = document.querySelector(".fa-angles-right");
+const calculateNextStartingPage = (page) => {
+  if (page % numberOfPaginationButtons === 0) {
+    return page + 1;
+  } else {
+    return (
+      Math.floor(page / numberOfPaginationButtons) * numberOfPaginationButtons +
+      numberOfPaginationButtons +
+      1
+    );
+  }
+};
+nextPaginationBtn.addEventListener("click", () => {
+  if (currentPage === lastPage) return;
+  const targetPage = calculateNextStartingPage(currentPage);
+  handleNavigatePage(targetPage);
+});
+
 //pagination
 const renderPagination = (totalItems) => {
   const paginationCon = document.querySelector(".pagination");
+
   const totalPages = Math.ceil(totalItems / rowsPerPage);
+
   let paginationHTML = "";
 
-  const startPageNum = (Math.ceil(Number(currentPage) / 10) - 1) * 10;
-  const endPageNum = Math.min(startPageNum + 10, totalPages);
+  const startPageNum =
+    (Math.ceil(currentPage / numberOfPaginationButtons) - 1) *
+      numberOfPaginationButtons +
+    1;
 
-  for (let i = 1; i <= totalPages; i++) {
-    if (i <= totalPages / 10) {
-      paginationHTML += `<button class="pageBtn ${
-        i === Number(currentPage) ? "clicked" : ""
-      }">${i}</button>`;
-    }
+  const endPageNum = Math.min(
+    startPageNum + numberOfPaginationButtons - 1,
+    totalPages
+  );
+
+  for (let i = startPageNum; i <= endPageNum; i++) {
+    paginationHTML += `<button class="pageBtn ${
+      i === currentPage ? "clicked" : ""
+    }">${i}</button>`;
   }
   paginationCon.innerHTML = paginationHTML;
 
   const pageButtons = document.querySelectorAll(".pageBtn");
+
   pageButtons.forEach((button) => {
     button.addEventListener("click", () => {
-      currentPage = button.textContent;
-      getDataJSONP("myCallback", "itemList");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      handleNavigatePage(Number(button.textContent));
     });
   });
 };
+
+const setNumberOfPaginationButtons = () => {
+  console.log(window.innerWidth);
+  if (window.innerWidth > 600) {
+    numberOfPaginationButtons = 10;
+    renderPagination(totalItems);
+  } else {
+    numberOfPaginationButtons = 5;
+    renderPagination(totalItems);
+  }
+};
+
+setNumberOfPaginationButtons();
+
+window.addEventListener("resize", setNumberOfPaginationButtons);
+
+//pagination
+// const renderPagination = (totalItems) => {
+//   const paginationCon = document.querySelector(".pagination");
+//   const totalPages = Math.ceil(totalItems / rowsPerPage);
+//   let paginationHTML = "";
+//   for (let i = 1; i <= totalPages; i++) {
+//     if (i <= totalPages / 10) {
+//       paginationHTML += `<button class="pageBtn ${
+//         i === Number(currentPage) ? "clicked" : ""
+//       }">${i}</button>`;
+//     }
+//   }
+//   paginationCon.innerHTML = paginationHTML;
+
+//   const pageButtons = document.querySelectorAll(".pageBtn");
+//   pageButtons.forEach((button) => {
+//     button.addEventListener("click", () => {
+//       currentPage = button.textContent;
+//       getDataJSONP("myCallback", "itemList");
+//       window.scrollTo({ top: 0, behavior: "smooth" });
+//       document.body.style.overflow = "auto";
+//     });
+//   });
+// };
 
 //검색;
 const searchBtn = document.querySelector(".searchBtn");
@@ -92,7 +200,7 @@ categoryTab.addEventListener("click", (e) => {
     button.classList.remove("active");
   });
 
-  currentPage = "1";
+  currentPage = 1;
 
   if (e.target.dataset.tab === "ItemNewAll") {
     queryType = "ItemNewAll";
@@ -110,17 +218,17 @@ categoryTab.addEventListener("click", (e) => {
 const rowsPerPageOption = [
   {
     name: "10개씩",
-    value: "10",
+    value: 10,
   },
 
   {
     name: "30개씩",
-    value: "30",
+    value: 30,
   },
 
   {
     name: "50개씩",
-    value: "50",
+    value: 50,
   },
 ];
 
@@ -137,7 +245,7 @@ rowsPerPageOption.forEach((rowsOption) => {
 
 // 페이지당 행 수 변경 이벤트 핸들러
 selectRowsPerPage.addEventListener("change", (e) => {
-  rowsPerPage = e.target.value;
+  rowsPerPage = Number(e.target.value);
   getDataJSONP("myCallback", "itemList");
 });
 
@@ -193,12 +301,19 @@ const getDataJSONP = (callbackName, endpoint) => {
 
   if (endpoint === "ItemSearch")
     baseUrl.searchParams.append("Query", searchKeyWord);
-  const script = document.createElement("script");
-  // JSONP 서버의 URL 설정
+
+  let script = document.querySelector("#jsonp");
+  if (script) {
+    script.remove();
+  }
+  script = document.createElement("script");
+  script.id = "jsonp";
+  // // JSONP 서버의 URL 설정
   script.src = baseUrl;
+  document.body.appendChild(script);
   // 콜백 함수 설정
   window[callbackName] = (data, error) => {
-    // console.log("fetched data", data);
+    console.log("fetched data", data);
     if (error) {
       return alert(error.errorMessage);
     }
