@@ -150,11 +150,8 @@ main > div:nth-of-type(2) {
 main select {
   float: right;
 }
-/* main .bookInfoList {
-  border: 1px solid red;
-} */
+
 .bookInfoList .bookInfoWrap {
-  /* border: 1px solid yellow; */
   width: 100%;
   padding: 2rem 0;
   border-bottom: 1px dotted var(--main-color);
@@ -168,13 +165,16 @@ main select {
   min-width: 20px;
 }
 .bookInfoWrap .bookImg {
+  width: 15vw;
+  min-width: 15vw;
   margin: 0 1rem;
 }
 .bookInfoWrap .bookImg img {
   width: 100%;
+  height: auto;
 }
 .bookInfo {
-  width: 70%;
+  /* flex-grow: 1; */
 }
 .bookInfo .bookTitle {
   display: flex;
