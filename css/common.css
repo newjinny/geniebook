@@ -11,6 +11,7 @@ button {
   cursor: pointer;
 }
 .wrap {
+  min-width: 300px;
   overflow: hidden;
 }
 
@@ -32,13 +33,14 @@ header h1 {
   text-align: center;
 }
 header h1 img {
-  width: 50%;
+  width: 30%;
   object-fit: contain;
 }
 .searchBar {
   display: flex;
   width: 100%;
   justify-content: center;
+  padding: 0 15%;
 }
 .searchBar input {
   flex-grow: 1;
@@ -51,13 +53,13 @@ header h1 img {
 }
 
 .searchBar button {
-  width: 20%;
-  padding: 10px 0;
+  padding: 10px 40px;
   color: white;
   font-weight: bold;
   font-size: 1rem;
   background-color: var(--main-color);
   border-radius: 0px 100px 100px 0px;
+  white-space: nowrap;
 }
 
 .categoryTab {
@@ -160,18 +162,31 @@ main select {
   -webkit-line-clamp: 2;
   overflow: hidden;
 }
-.pagination {
+.pgCon {
+  display: flex;
   padding: 2rem 0;
-  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+.pgCon i {
+  color: gray;
+  padding: 0.8rem;
+  font-size: 0.7rem;
+  cursor: pointer;
 }
 
 .pagination button {
-  font-size: 1rem;
+  font-size: 0.8rem;
+  width: 25px;
+  height: 25px;
+  border-radius: 25px;
+  background-color: transparent;
 }
-.pagination button:hover,
+
+/* .pagination button:hover, */
 .pagination button.clicked {
-  font-weight: bold;
-  text-decoration: underline;
+  background-color: lightgrey;
+  padding: 1px;
 }
 @media (max-width: 600px) {
   .ham {

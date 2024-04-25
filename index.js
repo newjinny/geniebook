@@ -33,6 +33,9 @@ const renderPagination = (totalItems) => {
   const totalPages = Math.ceil(totalItems / rowsPerPage);
   let paginationHTML = "";
 
+  const startPageNum = (Math.ceil(Number(currentPage) / 10) - 1) * 10;
+  const endPageNum = Math.min(startPageNum + 10, totalPages);
+
   for (let i = 1; i <= totalPages; i++) {
     if (i <= totalPages / 10) {
       paginationHTML += `<button class="pageBtn ${
@@ -48,22 +51,37 @@ const renderPagination = (totalItems) => {
       currentPage = button.textContent;
       getDataJSONP("myCallback", "itemList");
       window.scrollTo({ top: 0, behavior: "smooth" });
-      // pageButtons.forEach((btn) => {
-      //   btn.classList.remove("clicked");
-      // });
-      // button.classList.add("clicked");
     });
   });
 };
 
-// 검색
+//검색;
 const searchBtn = document.querySelector(".searchBtn");
 const searchInput = document.querySelector(".searchBar input");
 searchBtn.addEventListener("click", () => {
   searchKeyWord = searchInput.value;
-
+  // getSearchResult();
   getDataJSONP("myCallback", "ItemSearch");
 });
+
+// const getSearchResult = async () => {
+//   const searchUrl = new URL(
+//     `https://port-0-aladin-api-k19y2kljnp6r89.sel4.cloudtype.app/search`
+//   );
+
+//   searchUrl.searchParams.append("Query", searchKeyWord);
+//   searchUrl.searchParams.append("MaxResults", rowsPerPage);
+//   searchUrl.searchParams.append("start", currentPage);
+//   searchUrl.searchParams.append("QueryType", "Keyword");
+//   searchUrl.searchParams.append("SearchTarget", searchTarget);
+
+//   const response = await fetch(searchUrl);
+//   const data = await response.json();
+//   console.log(data);
+
+//   renderBookInfo(data.item);
+//   renderPagination(data.totalResults);
+// };
 
 // tab클릭
 const categoryTab = document.querySelector(".categoryTab");
@@ -180,7 +198,7 @@ const getDataJSONP = (callbackName, endpoint) => {
   script.src = baseUrl;
   // 콜백 함수 설정
   window[callbackName] = (data, error) => {
-    console.log("fetched data", data);
+    // console.log("fetched data", data);
     if (error) {
       return alert(error.errorMessage);
     }
