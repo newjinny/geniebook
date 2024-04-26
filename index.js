@@ -186,18 +186,13 @@ searchInput.addEventListener("focus", () => {
   searchInput.setAttribute("placeholder", "");
 });
 
-document.addEventListener("click", (e) => {
-  if (e.target !== searchInput && e.target !== searchBtn) {
-    searchInput.setAttribute("placeholder", "입력해주세요");
-  }
-});
 searchBtn.addEventListener("click", () => {
   dataResultType = "search";
   searchKeyWord = searchInput.value;
   currentPage = 1;
   getSearchResult();
 
-  searchInput.setAttribute("placeholder", "입력해주세요");
+  searchInput.setAttribute("placeholder", "검색어를 입력하세요.");
 });
 
 // 검색 결과 호출
