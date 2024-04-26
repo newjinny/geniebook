@@ -182,11 +182,22 @@ searchInput.addEventListener("keydown", (e) => {
     searchBtn.click();
   }
 });
+searchInput.addEventListener("focus", () => {
+  searchInput.setAttribute("placeholder", "");
+});
+
+document.addEventListener("click", (e) => {
+  if (e.target !== searchInput && e.target !== searchBtn) {
+    searchInput.setAttribute("placeholder", "입력해주세요");
+  }
+});
 searchBtn.addEventListener("click", () => {
   dataResultType = "search";
   searchKeyWord = searchInput.value;
   currentPage = 1;
   getSearchResult();
+
+  searchInput.setAttribute("placeholder", "입력해주세요");
 });
 
 // 검색 결과 호출
@@ -286,10 +297,8 @@ const renderBookInfo = (books) => {
             <a href = "${book.link}">${book.title}</a>
             </div>
           <div class="issueInfo">
-            <div>${book.author}</div>
-            <div>${book.publisher}</div>
-            <time>${book.pubDate}</time>
-          </div>
+            <div>${book.author} | ${book.publisher} | ${book.pubDate}</div>
+             </div>
           <div class="priceInfo">
             <span class="priceStandard">${book.priceStandard.toLocaleString()}원</span>
             <span class="priceSales">${book.priceSales.toLocaleString()}원</span>
@@ -316,7 +325,7 @@ const getDataJSONP = (callbackName, endpoint) => {
   baseUrl.searchParams.append("output", "js");
   baseUrl.searchParams.append("Version", "20131101");
   baseUrl.searchParams.append("callback", callbackName);
-  baseUrl.searchParams.append("Cover", "Big");
+  baseUrl.searchParams.append("Cover", "MidBig");
 
   if (endpoint === "ItemSearch")
     baseUrl.searchParams.append("Query", searchKeyWord);

@@ -57,7 +57,7 @@ header h1 img {
   border: none;
   outline: none;
   height: 30px;
-  border: 0.3rem solid var(--main-color);
+  border: 0.2rem solid var(--main-color);
   border-radius: 100px 0 0 100px;
   padding: 10px 40px;
 }
@@ -160,50 +160,51 @@ main select {
 #bookInfoList .bookInfoWrap {
   display: flex;
   line-height: 1.5rem;
+  gap: 20px;
 }
 .bookInfoWrap > div:first-of-type {
   min-width: 20px;
 }
 .bookInfoWrap .bookImg {
-  width: 15vw;
-  min-width: 15vw;
+  /* width: 20%;
+  max-width: 20%; */
   margin: 0 1rem;
+  flex: 2;
 }
-.bookInfoWrap .bookImg img {
-  width: 100%;
-  height: auto;
-}
+
 .bookInfo {
-  /* flex-grow: 1; */
+  width: 80%;
 }
+
 .bookInfo .bookTitle {
   display: flex;
   flex-direction: column;
 }
 .bookInfo .bookTitle span {
   color: var(--main-color);
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 }
 .bookInfo .bookTitle a {
+  font-size: 1.1rem;
   font-weight: bold;
 }
 .bookInfo .issueInfo {
-  display: flex;
+  /* display: flex; */
+  /* padding: 5px 0; */
   font-size: 0.8rem;
   color: gray;
   align-items: center;
-  white-space: nowrap;
 }
 .issueInfo div {
   margin-right: 5px;
 }
-.issueInfo div::after {
+/* .issueInfo time::before {
   content: "|";
   margin-left: 5px;
   color: gray;
-}
+} */
 .priceInfo .priceStandard {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-decoration: line-through;
 }
 .priceInfo .priceSales {
@@ -211,20 +212,21 @@ main select {
   font-weight: bold;
 }
 .bookInfo p {
-  font-size: 0.7rem;
+  padding-top: 5px;
+  font-size: 0.8rem;
   line-height: 1rem;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   overflow: hidden;
 }
 
 @media (max-width: 600px) {
+  .bookInfo .bookTitle a {
+    font-size: 0.9rem;
+  }
   .bookInfo .issueInfo {
-    display: flex;
-    font-size: 0.6rem;
-    color: gray;
-    align-items: center;
+    display: none;
   }
   .issueInfo div {
     margin-right: 2px;
@@ -247,6 +249,9 @@ main select {
     width: 100%;
     padding-left: 16px;
   }
+  .bookInfoWrap .bookImg img {
+    width: 100%;
+  }
   .bookInfo .issueInfo {
     display: none;
   }
@@ -260,12 +265,12 @@ main select {
 .pgCon i {
   color: gray;
   padding: 0.8rem;
-  font-size: 0.7rem;
+  font-size: 0.9rem;
   cursor: pointer;
 }
 
 .pagination button {
-  font-size: 0.8rem;
+  font-size: 1rem;
   opacity: 0.3;
 }
 
