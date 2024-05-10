@@ -10,6 +10,10 @@ let lastPaginationIndex = Infinity;
 let numberOfPaginationButtons = 10;
 let dataResultType = "list";
 
+const API_KEY = "ttbsyj94370945002";
+const getBaseUrl = (apiEndpoint) =>
+  new URL(`http://www.aladin.co.kr/ttb/api/${apiEndpoint}.aspx`);
+
 // 현재 페이지네이션 인덱스 계산
 const calculatePaginationIndex = (page) => {
   return page % numberOfPaginationButtons === 0
@@ -38,10 +42,6 @@ const updatePageInfo = (data) => {
     ? (nextPaginationBtn.style.display = "none")
     : (nextPaginationBtn.style.display = "block");
 };
-
-const API_KEY = "ttbsyj94370945002";
-const getBaseUrl = (apiEndpoint) =>
-  new URL(`http://www.aladin.co.kr/ttb/api/${apiEndpoint}.aspx`);
 
 const hamBtn = document.querySelector(".ham");
 const closeBtn = document.querySelector(".closeBtn");
@@ -177,11 +177,14 @@ window.addEventListener("resize", setNumberOfPaginationButtons);
 // 검색 인풋 및 버튼 핸들러
 const searchBtn = document.querySelector(".searchBtn");
 const searchInput = document.querySelector(".searchBar input");
+const searchResultInfo = document.querySelector("#searchResultInfo");
+
 searchInput.addEventListener("keydown", (e) => {
   if (e.key === "Enter") {
     searchBtn.click();
   }
 });
+
 searchInput.addEventListener("focus", () => {
   searchInput.setAttribute("placeholder", "");
 });
@@ -190,9 +193,8 @@ searchBtn.addEventListener("click", () => {
   dataResultType = "search";
   searchKeyWord = searchInput.value;
   currentPage = 1;
-  getSearchResult();
 
-  searchInput.setAttribute("placeholder", "검색어를 입력하세요.");
+  getSearchResult();
 });
 
 // 검색 결과 호출
@@ -213,12 +215,14 @@ const getSearchResult = async () => {
   console.log(data);
 
   updatePageInfo(data);
+  searchResultInfo.textContent = `"${searchKeyWord}" 검색 결과`;
 };
 
 // tab클릭
 const categoryTab = document.querySelector(".categoryTab");
 categoryTab.addEventListener("click", (e) => {
   if (e.target.tagName !== "BUTTON") return;
+  searchResultInfo.remove();
 
   document.querySelectorAll(".categoryTab button").forEach((button) => {
     button.classList.remove("active");
@@ -233,6 +237,7 @@ categoryTab.addEventListener("click", (e) => {
     queryType = "Bestseller";
     searchTarget = e.target.dataset.tab;
   }
+  searchInput.value = "";
 
   e.target.classList.add("active");
   dataResultType = "list";
@@ -279,13 +284,13 @@ const renderBookInfo = (books) => {
   const bookListContainer = document.getElementById("bookInfoList");
   let ulHTML = `<ul>`;
   books.forEach((book, i) => {
-    ulHTML += `<li>
+    ulHTML += `
+    <li>
       <div class="bookInfoWrap">
         <div>${(currentPage - 1) * rowsPerPage + i + 1}</div>
         <a href = "${book.link}" class="bookImg">
-          <img src="${book.cover}" alt="${
-      book.title
-    }" class="bookCoverImage" /></a>
+          <img src="${book.cover}" alt="${book.title}" 
+      class="bookCoverImage" /></a>
         <div class="bookInfo">
           <div class="bookTitle">
             <span>${book.categoryName}</span>
@@ -293,7 +298,7 @@ const renderBookInfo = (books) => {
             </div>
           <div class="issueInfo">
             <div>${book.author} | ${book.publisher} | ${book.pubDate}</div>
-             </div>
+            </div>
           <div class="priceInfo">
             <span class="priceStandard">${book.priceStandard.toLocaleString()}원</span>
             <span class="priceSales">${book.priceSales.toLocaleString()}원</span>
