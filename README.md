@@ -22,4 +22,4 @@
 &emsp;&emsp;✔️ CORS 문제를 우회하기 위해 서버 측에서 JSON 데이터를 동적으로 생성하는 JSONP를 사용하여 데이터를 요청
 
 &emsp;**2. 검색 API의 접근 제한으로 인한 데이터 불러오기 제한**  
-&emsp;&emsp;✔️ Node.js를 활용하여 서버 구축하여 API 요청
+&emsp;&emsp;✔️ Node.js 활용하여 서버 구축 후 API 요청
